@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const { protect } = require("./middleware/auth");
 
 // Load environment variables
 dotenv.config();
@@ -15,8 +16,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/api/students", require("./routes/studentRoutes"));
+// Public routes
+app.use("/api/auth", require("./routes/authRoutes"));
+
+// Protected routes
+app.use("/api/students", protect, require("./routes/studentRoutes"));
+app.use("/api/courses", protect, require("./routes/courseRoutes"));
+app.use("/api/analytics", protect, require("./routes/analyticsRoutes"));
 
 // Health check route
 app.get("/", (req, res) => {
