@@ -229,9 +229,9 @@ function DashboardPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "16px" }}>
-                    <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Page {page} of {totalPages}</span>
-                    <div style={{ display: "flex", gap: "8px" }}>
+                <div className="pagination">
+                    <span className="pagination-info">Page {page} of {totalPages}</span>
+                    <div className="pagination-buttons">
                         <button disabled={page <= 1} onClick={() => setPage(page - 1)} className="btn btn-outline">Previous</button>
                         <button disabled={page >= totalPages} onClick={() => setPage(page + 1)} className="btn btn-outline">Next</button>
                     </div>

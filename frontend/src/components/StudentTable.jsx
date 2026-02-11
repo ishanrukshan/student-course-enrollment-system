@@ -40,11 +40,11 @@ function StudentTable({ students, loading, onEdit, onDelete, sortField, sortOrde
     }
 
     const columns = [
-        { key: "name", label: "Student" },
-        { key: "email", label: "Email" },
-        { key: "phone", label: "Phone" },
-        { key: "course", label: "Course" },
-        { key: "status", label: "Status" },
+        { key: "name", label: "Student", className: "" },
+        { key: "email", label: "Email", className: "hide-mobile" },
+        { key: "phone", label: "Phone", className: "hide-mobile" },
+        { key: "course", label: "Course", className: "hide-sm" },
+        { key: "status", label: "Status", className: "" },
     ];
 
     const getSortArrow = (key) => {
@@ -64,7 +64,7 @@ function StudentTable({ students, loading, onEdit, onDelete, sortField, sortOrde
                                 <input type="checkbox" className="checkbox" checked={allSelected} onChange={() => onSelectAll()} />
                             </th>
                             {columns.map((col) => (
-                                <th key={col.key} onClick={() => onSort(col.key)}>
+                                <th key={col.key} className={col.className} onClick={() => onSort(col.key)}>
                                     {col.label}{getSortArrow(col.key)}
                                 </th>
                             ))}
@@ -83,9 +83,9 @@ function StudentTable({ students, loading, onEdit, onDelete, sortField, sortOrde
                                         <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>{s.name}</span>
                                     </Link>
                                 </td>
-                                <td>{s.email}</td>
-                                <td>{s.phone}</td>
-                                <td>{s.course}</td>
+                                <td className="hide-mobile">{s.email}</td>
+                                <td className="hide-mobile">{s.phone}</td>
+                                <td className="hide-sm">{s.course}</td>
                                 <td>
                                     <span className={getBadgeClass(s.status)}>
                                         <span className="badge-dot"></span>

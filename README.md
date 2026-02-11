@@ -39,6 +39,7 @@ A full-stack web application for managing student enrollments, built with the **
 - 🌙 Dark theme with modern glassmorphism design
 - 🔔 Custom toast notifications (success, error, warning, info)
 - ⚠️ Custom confirmation dialogs (replaces browser alerts)
+- 📱 Responsive design with mobile hamburger menu
 - 🔐 JWT authentication with login/register
 
 ---

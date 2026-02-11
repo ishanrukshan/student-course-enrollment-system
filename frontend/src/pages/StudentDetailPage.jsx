@@ -57,7 +57,7 @@ function StudentDetailPage() {
 
             {/* Student info card */}
             <div className="card" style={{ marginBottom: "16px" }}>
-                <div className="card-body" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <div className="card-body detail-card-body" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                     <div className="avatar avatar-purple" style={{ width: "56px", height: "56px", fontSize: "20px", borderRadius: "14px" }}>{initials}</div>
                     <div>
                         <h2 style={{ fontSize: "18px", fontWeight: 600, marginBottom: "4px" }}>{student.name}</h2>
