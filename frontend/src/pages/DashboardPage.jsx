@@ -31,7 +31,7 @@ function DashboardPage() {
     useEffect(() => {
         getAllCourses()
             .then((res) => setCourses(res.data.map((c) => c.name)))
-            .catch((err) => { if (err.response?.status === 401) navigate("/login"); });
+            .catch(() => { });
     }, [navigate]);
 
     const fetchStudents = useCallback(async () => {
@@ -43,8 +43,7 @@ function DashboardPage() {
             setTotal(data.total);
             setSelectedIds([]);
         } catch (err) {
-            if (err.response?.status === 401) { navigate("/login"); return; }
-            toast.error("Failed to load students.");
+            if (err.response?.status !== 401) toast.error("Failed to load students.");
         } finally { setLoading(false); }
     }, [search, courseFilter, page, sortField, sortOrder, navigate]);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { getAllCourses, createCourse, updateCourse, deleteCourse } from "../api/studentApi";
 import { useToast } from "../components/Toast";
 import { useConfirm } from "../components/ConfirmModal";
@@ -10,7 +10,7 @@ function CoursesPage() {
     const [showForm, setShowForm] = useState(false);
     const [editingCourse, setEditingCourse] = useState(null);
     const [name, setName] = useState("");
-    const navigate = useNavigate();
+
     const toast = useToast();
     const confirm = useConfirm();
 
@@ -20,8 +20,7 @@ function CoursesPage() {
             const { data } = await getAllCourses();
             setCourses(data);
         } catch (err) {
-            if (err.response?.status === 401) { navigate("/login"); return; }
-            toast.error("Failed to load courses.");
+            if (err.response?.status !== 401) toast.error("Failed to load courses.");
         } finally { setLoading(false); }
     };
 

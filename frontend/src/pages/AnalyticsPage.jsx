@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend,
     LineChart, Line,
 } from "recharts";
+import { getAnalytics } from "../api/studentApi";
+import { useToast } from "../components/Toast";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16", "#ef4444"];
 
@@ -19,17 +20,24 @@ const darkTooltipStyle = {
 function AnalyticsPage() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const toast = useToast();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) { navigate("/login"); return; }
-        fetch("/api/analytics", { headers: { Authorization: `Bearer ${token}` } })
-            .then((res) => { if (res.status === 401) { navigate("/login"); return null; } return res.json(); })
-            .then((d) => { if (d) setData(d); })
-            .catch(() => { })
-            .finally(() => setLoading(false));
-    }, [navigate]);
+        const fetchData = async () => {
+            try {
+                const { data: analytics } = await getAnalytics();
+                setData(analytics);
+            } catch (err) {
+                // 401 is handled globally by the Axios interceptor
+                if (err.response?.status !== 401) {
+                    toast.error("Failed to load analytics data.");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     if (loading) return <div style={{ padding: "48px", textAlign: "center", color: "var(--text-muted)" }}>Loading...</div>;
     if (!data) return null;

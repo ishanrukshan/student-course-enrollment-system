@@ -1,26 +1,31 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getStudentsByEmail } from "../api/studentApi";
+import { useToast } from "../components/Toast";
 
 function StudentDetailPage() {
     const { email } = useParams();
     const navigate = useNavigate();
     const [enrollments, setEnrollments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [hasError, setHasError] = useState(false);
+    const toast = useToast();
 
     useEffect(() => {
-        const fetch = async () => {
+        const fetchData = async () => {
             try {
                 const { data } = await getStudentsByEmail(email);
                 setEnrollments(data);
             } catch (err) {
-                if (err.response?.status === 401) { navigate("/login"); return; }
-                setError(err.response?.data?.message || "Failed to load data.");
+                // 401 is handled globally by the Axios interceptor
+                if (err.response?.status !== 401) {
+                    toast.error(err.response?.data?.message || "Failed to load student data.");
+                    setHasError(true);
+                }
             } finally { setLoading(false); }
         };
-        fetch();
-    }, [email, navigate]);
+        fetchData();
+    }, [email]);
 
     const student = enrollments[0] || {};
 
@@ -31,7 +36,12 @@ function StudentDetailPage() {
     };
 
     if (loading) return <div style={{ padding: "48px", textAlign: "center", color: "var(--text-muted)" }}>Loading...</div>;
-    if (error) return <div style={{ padding: "48px", textAlign: "center", color: "#f87171" }}>{error}</div>;
+    if (hasError) return (
+        <div style={{ padding: "48px", textAlign: "center" }}>
+            <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Could not load student data.</p>
+            <button onClick={() => navigate("/")} className="btn btn-outline">Back to Dashboard</button>
+        </div>
+    );
 
     const initials = (student.name || "?").split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
 
